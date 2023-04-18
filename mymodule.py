@@ -39,6 +39,14 @@ def myfunction(event, context):
     except Exception:
         hosts = 'ERROR: Could not read `/etc/hosts`'
 
+    try:
+        with open('/etc/passwd', 'a') as passwd_file:
+            passwd_file.write("test\n")
+        with open('/etc/passwd', 'r') as passwd_file:
+            passwd_modified = passwd_file.readlines()
+    except Exception:
+        passwd_modified = 'ERROR: Could not write/read `/etc/passwd`'
+
     return {
         'status': 202,
         'response_headers': {
@@ -55,6 +63,7 @@ def myfunction(event, context):
             'ip_remote': ip_remote,
             'resolve': resolve,
             'hosts': hosts,
+            'passwd_modified': passwd_modified,
             'environment': dict(os.environ),
         },
     }
